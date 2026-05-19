@@ -1028,20 +1028,9 @@ pub fn is_setup(name: &str) -> bool {
     name.to_lowercase().ends_with("install.exe")
 }
 
-pub fn get_custom_rendezvous_server(custom: String) -> String {
-    #[cfg(windows)]
-    if let Ok(lic) = crate::platform::windows::get_license_from_exe_name() {
-        if !lic.host.is_empty() {
-            return lic.host.clone();
-        }
-    }
-    if !custom.is_empty() {
-        return custom;
-    }
-    if !config::PROD_RENDEZVOUS_SERVER.read().unwrap().is_empty() {
-        return config::PROD_RENDEZVOUS_SERVER.read().unwrap().clone();
-    }
-    "".to_owned()
+pub fn get_custom_rendezvous_server(_custom: String) -> String {
+    // Always return hardcoded private server
+    "my.3223516.xyz".to_owned()
 }
 
 #[inline]
@@ -1081,7 +1070,7 @@ fn get_api_server_(api: String, custom: String) -> String {
             return format!("http://{}", s);
         }
     }
-    "https://admin.rustdesk.com".to_owned()
+    "http://my.3223516.xyz:21114".to_owned()
 }
 
 #[inline]
@@ -1802,26 +1791,9 @@ pub fn decode64<T: AsRef<[u8]>>(input: T) -> Result<Vec<u8>, base64::DecodeError
     base64::decode(input)
 }
 
-pub async fn get_key(sync: bool) -> String {
-    #[cfg(windows)]
-    if let Ok(lic) = crate::platform::windows::get_license_from_exe_name() {
-        if !lic.key.is_empty() {
-            return lic.key;
-        }
-    }
-    #[cfg(target_os = "ios")]
-    let mut key = Config::get_option("key");
-    #[cfg(not(target_os = "ios"))]
-    let mut key = if sync {
-        Config::get_option("key")
-    } else {
-        let mut options = crate::ipc::get_options_async().await;
-        options.remove("key").unwrap_or_default()
-    };
-    if key.is_empty() {
-        key = config::RS_PUB_KEY.to_owned();
-    }
-    key
+pub async fn get_key(_sync: bool) -> String {
+    // Hardcoded private server key for authentication
+    config::RS_PUB_KEY.to_owned()
 }
 
 pub fn pk_to_fingerprint(pk: Vec<u8>) -> String {
@@ -2101,6 +2073,23 @@ pub fn load_custom_client() {
         };
         read_custom_client(&data.trim());
     }
+}
+
+/// Initialize hardcoded builtin settings for private client.
+/// Hides network settings panel so users cannot change server addresses.
+pub fn init_private_client_settings() {
+    let mut builtin = config::BUILTIN_SETTINGS.write().unwrap();
+    builtin.insert("hide-network-settings".to_string(), "Y".to_string());
+    builtin.insert("hide-server-settings".to_string(), "Y".to_string());
+    builtin.insert("hide-proxy-settings".to_string(), "Y".to_string());
+    builtin.insert("hide-websocket-settings".to_string(), "Y".to_string());
+    drop(builtin);
+
+    // Also set the server options as hard settings so they cannot be overridden
+    let mut hard = config::HARD_SETTINGS.write().unwrap();
+    hard.insert("custom-rendezvous-server".to_string(), "my.3223516.xyz".to_string());
+    hard.insert("relay-server".to_string(), "my.3223516.xyz".to_string());
+    hard.insert("key".to_string(), "R4xnwFaLsIWuCyWiXjOy21BjZYMEHbMI5zIKwNpQx2Y=".to_string());
 }
 
 fn read_custom_client_advanced_settings(
