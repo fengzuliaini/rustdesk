@@ -106,6 +106,29 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
+
       - name: Install Syft
         uses: anchore/sbom-action/download-syft@v0
 
@@ -189,6 +212,29 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           submodules: recursive
+
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
 
       - name: Restore bridge files
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
@@ -575,6 +621,29 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
+
       - name: Install LLVM and Clang
         uses: rustdesk-org/install-llvm-action-32bit@6aa7d9ad3df84dff01cd4596dd0fc880a7f47fce # no release tag; commit 2026-05-26
         with:
@@ -755,6 +824,29 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
+
       - name: Install flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
         with:
@@ -883,6 +975,29 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           submodules: recursive
+
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
 
       - name: Import the codesign cert
         if: env.MACOS_P12_BASE64 != null
@@ -1399,6 +1514,29 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
+
       - name: Install flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
         with:
@@ -1672,6 +1810,29 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
+
       - name: Install flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
         with:
@@ -1838,6 +1999,29 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           submodules: recursive
+
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
 
       - name: Set Swap Space
         uses: pierotofy/set-swap-space@49819abfb41bd9b44fb781159c033dba90353a7c # v1.0
@@ -2164,6 +2348,29 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           submodules: recursive
+
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
 
       - name: Set Swap Space
         uses: pierotofy/set-swap-space@49819abfb41bd9b44fb781159c033dba90353a7c # v1.0
@@ -2501,6 +2708,29 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
+
       - name: Modify vcpkg.json for armv7
         if: matrix.job.vcpkg-triplet == 'arm-linux'
         run: |
@@ -2718,6 +2948,29 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
+
       - name: Download Binary
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
@@ -2794,6 +3047,29 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
+
       - name: Download Binary
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
@@ -2855,6 +3131,29 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           submodules: recursive
+
+      - name: Inject custom self-hosted server
+        shell: bash
+        run: |
+          python3 - <<'PYEOF'
+          import re, pathlib, sys
+          p = pathlib.Path("libs/hbb_common/src/config.rs")
+          t = p.read_text(encoding="utf-8")
+          t, n1 = re.subn(
+              r'pub\s+const\s+RENDEZVOUS_SERVERS\s*:\s*&\s*\[\s*&str\s*\]\s*=\s*&\s*\[.*?\]\s*;',
+              'pub const RENDEZVOUS_SERVERS: &[&str] = &["61.167.237.45"];',
+              t, flags=re.DOTALL)
+          if n1 != 1:
+              sys.exit("FAIL: RENDEZVOUS_SERVERS pattern not found")
+          t, n2 = re.subn(
+              r'pub\s+static\s+ref\s+DEFAULT_SETTINGS\s*:\s*RwLock\s*<\s*HashMap\s*<\s*String\s*,\s*String\s*>\s*>\s*=\s*Default::default\s*\(\s*\)\s*;',
+              'pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new(HashMap::from([("custom-rendezvous-server".to_owned(), "61.167.237.45".to_owned()), ("relay-server".to_owned(), "61.167.237.45".to_owned()), ("key".to_owned(), "Zn4nEm3TRmG4HW7b4I4BFuxIw17B+fWWb88Fv6omfAs=".to_owned())]));',
+              t, flags=re.DOTALL)
+          if n2 != 1:
+              sys.exit("FAIL: DEFAULT_SETTINGS pattern not found")
+          p.write_text(t, encoding="utf-8")
+          print("Custom self-hosted server injected.")
+          PYEOF
 
       - name: Prepare env
         run: |
